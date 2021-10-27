@@ -1,4 +1,4 @@
-package main.java.com.walmart;
+package com.walmart;
 
 import java.util.*;
 import java.util.function.Consumer;

@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.leetcode;
+package com.oracle.casb.leetcode;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

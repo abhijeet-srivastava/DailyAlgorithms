@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.codevita;
+package com.oracle.casb.codevita;
 
 public class Transpose {
 

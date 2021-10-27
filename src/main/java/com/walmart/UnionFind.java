@@ -1,4 +1,4 @@
-package main.java.com.walmart;
+package com.walmart;
 
 public class UnionFind {
     private int count = 0;

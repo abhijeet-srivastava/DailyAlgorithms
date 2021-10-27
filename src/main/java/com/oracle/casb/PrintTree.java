@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb;
+package com.oracle.casb;
 
 import java.io.IOException;
 import java.nio.file.Files;

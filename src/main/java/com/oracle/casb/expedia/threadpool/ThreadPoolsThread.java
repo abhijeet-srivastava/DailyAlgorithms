@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.expedia.threadpool;
+package com.oracle.casb.expedia.threadpool;
 
 public class ThreadPoolsThread extends Thread {private BlockingQueueCustom<Runnable> taskQueue;
     private ThreadPool threadPool;

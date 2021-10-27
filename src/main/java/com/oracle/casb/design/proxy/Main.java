@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.design.proxy;
+package com.oracle.casb.design.proxy;
 
 import java.lang.reflect.Proxy;
 

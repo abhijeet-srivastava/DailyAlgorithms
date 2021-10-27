@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.junits;
+package com.oracle.casb.junits;
 
 import java.time.LocalDate;
 import java.time.Month;

@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb;
+package com.oracle.casb;
 
 public class TrieNode {
     private static final int R = 26;

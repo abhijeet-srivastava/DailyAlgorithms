@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.CodeJam;
+package com.oracle.casb.CodeJam;
 
 import com.google.common.collect.ImmutableList;
 

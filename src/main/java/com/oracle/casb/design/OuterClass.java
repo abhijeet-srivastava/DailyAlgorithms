@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.design;
+package com.oracle.casb.design;
 
 import java.io.File;
 import java.io.FilenameFilter;

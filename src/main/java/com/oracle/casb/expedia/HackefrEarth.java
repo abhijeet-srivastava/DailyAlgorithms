@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.expedia;
+package com.oracle.casb.expedia;
 
 import java.util.*;
 import java.util.stream.Collectors;

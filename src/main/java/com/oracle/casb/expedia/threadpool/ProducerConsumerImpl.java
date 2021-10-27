@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.expedia.threadpool;
+package com.oracle.casb.expedia.threadpool;
 
 import java.util.LinkedList;
 import java.util.Queue;

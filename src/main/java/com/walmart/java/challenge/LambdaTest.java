@@ -1,4 +1,4 @@
-package main.java.com.walmart.java.challenge;
+package com.walmart.java.challenge;
 
 import java.util.function.*;
 

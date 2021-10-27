@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.leetcode.dp;
+package com.oracle.casb.leetcode.dp;
 
 public class PatternMatching {
 

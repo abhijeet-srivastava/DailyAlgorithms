@@ -1,4 +1,4 @@
-package main.java.com.walmart;
+package com.walmart;
 
 import java.util.ArrayList;
 import java.util.Arrays;

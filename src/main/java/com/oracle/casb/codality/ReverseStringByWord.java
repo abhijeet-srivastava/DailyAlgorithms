@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.codality;
+package com.oracle.casb.codality;
 
 import com.google.common.collect.Lists;
 

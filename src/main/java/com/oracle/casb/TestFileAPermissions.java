@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb;
+package com.oracle.casb;
 
 import com.google.common.collect.ImmutableSet;
 import com.oracle.casb.common.FSPermissions;

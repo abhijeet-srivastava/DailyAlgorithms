@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.sys.ratelimiter;
+package com.oracle.casb.sys.ratelimiter;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,6 +36,5 @@ public class SimpleRateLimiter {
         scheduler.scheduleWithFixedDelay(() -> {
             semaphore.release(maxPermits - semaphore.availablePermits());
         }, 0,1, timePeriod);
-
     }
 }

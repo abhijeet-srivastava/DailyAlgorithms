@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.expedia;
+package com.oracle.casb.expedia;
 
 
 public class MyLinkedList {

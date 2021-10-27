@@ -1,4 +1,4 @@
-package main.java.com.walmart.graph;
+package com.walmart.graph;
 
 import java.util.ArrayList;
 import java.util.List;

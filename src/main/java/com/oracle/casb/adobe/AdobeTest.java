@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.adobe;
+package com.oracle.casb.adobe;
 
 import com.google.common.collect.ImmutableList;
 

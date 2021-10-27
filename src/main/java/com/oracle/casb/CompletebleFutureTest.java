@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb;
+package com.oracle.casb;
 
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Response;

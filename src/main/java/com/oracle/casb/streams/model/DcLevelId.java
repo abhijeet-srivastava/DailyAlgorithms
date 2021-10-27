@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.streams.model;
+package com.oracle.casb.streams.model;
 
 
 public class DcLevelId {

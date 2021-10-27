@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.leetcode;
+package com.oracle.casb.leetcode;
 
 public class LinkListReorder {
 

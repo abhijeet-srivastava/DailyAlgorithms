@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.cards;
+package com.oracle.casb.cards;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -1,4 +1,4 @@
-package main.java.com.walmart.designpattern.visitor;
+package com.walmart.designpattern.visitor;
 
 
 import java.util.Map;

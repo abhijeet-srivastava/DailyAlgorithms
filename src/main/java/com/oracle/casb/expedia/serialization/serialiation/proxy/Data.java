@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.expedia.serialization.serialiation.proxy;
+package com.oracle.casb.expedia.serialization.serialiation.proxy;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;

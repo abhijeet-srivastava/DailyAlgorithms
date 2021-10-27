@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb;
+package com.oracle.casb;
 
 import org.apache.commons.io.FileUtils;
 

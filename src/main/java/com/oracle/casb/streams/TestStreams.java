@@ -1,9 +1,10 @@
-package main.java.com.oracle.casb.streams;
+package com.oracle.casb.streams;
 
 import com.google.common.collect.ImmutableList;
 import com.oracle.casb.common.Heap;
 import com.oracle.casb.streams.model.DcLevelData;
 import com.oracle.casb.streams.model.DcLevelId;
+import com.oracle.casb.streams.model.DcLevelData;
 
 import java.io.BufferedReader;
 import java.io.File;

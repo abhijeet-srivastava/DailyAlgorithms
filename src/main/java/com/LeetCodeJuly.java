@@ -1,4 +1,4 @@
-package main.java.com;
+package com;
 
 import com.oracle.casb.common.ListNode;
 

@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.common;
+package com.oracle.casb.common;
 
 import java.util.Optional;
 import java.util.function.Function;

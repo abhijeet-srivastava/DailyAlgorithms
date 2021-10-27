@@ -1,4 +1,4 @@
-package main.java.com.oracle.casb.design.singleton;
+package com.oracle.casb.design.singleton;
 
 import java.io.Serializable;
 

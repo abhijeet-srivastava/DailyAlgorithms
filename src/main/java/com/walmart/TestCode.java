@@ -1,4 +1,4 @@
-package main.java.com.walmart;
+package com.walmart;
 
 import java.text.DateFormat;
 import java.text.ParseException;

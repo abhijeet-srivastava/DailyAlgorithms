@@ -1,4 +1,4 @@
-package main.java.com.walmart.sql;
+package com.walmart.sql;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;

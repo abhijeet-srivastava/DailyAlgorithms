@@ -1,4 +1,4 @@
-package main.java.com.walmart.designpattern.visitor;
+package com.walmart.designpattern.visitor;
 
 public class Book implements Visitable{
     @Override
