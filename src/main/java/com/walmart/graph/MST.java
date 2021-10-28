@@ -30,7 +30,9 @@ public class MST {
 
     int find(int x, subset[] parentMapping) {
         while(x != parentMapping[x].parent) {
-            parentMapping[x].parent = parentMapping[]
+            parentMapping[x] = parentMapping[parentMapping[x].parent];
+            x = parentMapping[x].parent;
         }
+        return x;
     }
 }
