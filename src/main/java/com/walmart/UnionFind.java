@@ -21,6 +21,9 @@ public class UnionFind {
         return p;
     }
 
+    //Union By Rank
+    //Always attach smaller depth tree under the root of the deeper tree.
+    //Higher the rank greater the depth
     public void union(int p, int q) {
         int rootP = find(p);
         int rootQ = find(q);

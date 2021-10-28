@@ -3,7 +3,7 @@ package com.walmart.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-//https://codeforces.com/blog/entry/68138
+    //https://codeforces.com/blog/entry/68138
 public class ArticulationAndBridges {
 
     private  final List<Integer>[] GRAPH;
