@@ -34,22 +34,88 @@ class LRUCache {
     Map<Integer, Node> cache;
     Node leastRecentlyUsed;
     Node mostRecentlyUsed;
-    int maxCapacity;
+    int capacity;
     int currentCapacity;
     public LRUCache(int capacity) {
-        this.maxCapacity = capacity;
+        this.capacity = capacity;
         this.currentCapacity = 0;
         this.cache = new HashMap();
         //this.leastRecentlyUsed = this.mostRecentlyUsed = new Node();
     }
 
 
+    private void addNode(Node node) {
+        if(currentCapacity == 0) {
+            this.leastRecentlyUsed = this.mostRecentlyUsed = node;
+            return;
+        }
+        this.mostRecentlyUsed.next = node;
+        node.previous = this.mostRecentlyUsed;
+        this.mostRecentlyUsed = node;
+    }
+    private void removeNode(Node node) {
+        Node nxt = node.next;
+        Node previous = node.previous;
+
+        if(node.key == leastRecentlyUsed.key) {
+            //Left most node
+            nxt.previous = null;
+            leastRecentlyUsed = nxt;
+        } else {
+            nxt.previous = previous;
+            previous.next = nxt;
+        }
+        node.next = null;
+        node.previous = null;
+    }
+    private void moveToHead(Node node) {
+        if(node.key == mostRecentlyUsed.key) {
+            return;
+        }
+        removeNode(node);
+        addNode(node);
+    }
+
+    private Node popTail(){
+        Node node = leastRecentlyUsed;
+        Node nxt = node.next;
+        removeNode(node);
+        leastRecentlyUsed = nxt;
+        return node;
+    }
+    public int get(int key) {
+        Node node = this.cache.get(key);
+        if(node == null) {
+            return -1;
+        }
+        this.moveToHead(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        Node node = cache.get(key);
+        if(node == null) {
+            node = new Node(key, value);
+
+            this.cache.put(key, node);
+            addNode(node);
+            this.currentCapacity += 1;
+            if(this.currentCapacity > this.capacity){
+                Node tail = popTail();
+                this.cache.remove(tail.key);
+                this.currentCapacity -= 1;
+            }
+        }else {
+            node.value = value;
+            moveToHead(node);
+        }
+    }
     /**
      * Addd a node at front of queue
      * @param node
      */
 
-    private void addNode(Node node) {
+    private void addNode1(Node node) {
         if (currentCapacity == 0) {
             this.leastRecentlyUsed = this.mostRecentlyUsed = node;
             return;
@@ -59,67 +125,67 @@ class LRUCache {
         mostRecentlyUsed = node;
     }
 
-    private void removeNode(Node node) {
-        Node prev = node.previous;
+    private void removeNode1(Node node) {
+        Node previous = node.previous;
         Node next = node.next;
-        if (node.key == leastRecentlyUsed.key && prev != null) {
-            prev.next = null;
-            leastRecentlyUsed = prev;
+        if (node.key == leastRecentlyUsed.key && previous != null) {
+            previous.next = null;
+            leastRecentlyUsed = previous;
         } else {
-            prev.next = next;
-            next.previous = prev;
+            previous.next = next;
+            next.previous = previous;
         }
         node.next = null;
         node.previous = null;
     }
 
-    private void moveToHead(Node node) {
+    private void moveToHead1(Node node) {
         if (node.key == mostRecentlyUsed.key) {
             return;//Already at head
         }
-        this.removeNode(node);
-        this.addNode(node);
+        this.removeNode1(node);
+        this.addNode1(node);
     }
 
-    private Node popTail() {
+    private Node popTail1() {
         Node node = leastRecentlyUsed;
-        Node prev = node.previous;
-        removeNode(node);
-        prev.next = null;
-        leastRecentlyUsed = prev;
+        Node previous = node.previous;
+        removeNode1(node);
+        previous.next = null;
+        leastRecentlyUsed = previous;
         return node;
     }
 
 
 
-    public int get(int key) {
+    public int get1(int key) {
         Node node = cache.get(key);
         if(node == null){
             return -1;
         }
 
         // move the accessed node to the head;
-        this.moveToHead(node);
+        this.moveToHead1(node);
         return node.value;
     }
 
-    public void put(int key, int value) {
+    public void put1(int key, int value) {
         Node node = cache.get(key);
         if (node == null) {
             node =  new Node(key, value);
             this.cache.put(key, node);
-            this.addNode(node);
+            this.addNode1(node);
 
             currentCapacity += 1;
 
-            if(currentCapacity > maxCapacity) {
-                Node tail = this.popTail();
+            if(currentCapacity > capacity) {
+                Node tail = this.popTail1();
                 this.cache.remove(tail.key);
                 currentCapacity -= 1;
             }
         } else {
             node.value = value;
-            this.moveToHead(node);
+            this.moveToHead1(node);
         }
     }
 }
