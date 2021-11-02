@@ -1,17 +1,84 @@
 package com.walmart;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TrappingWater {
 
+    private class Cell implements Comparable<Cell> {
+        int row;
+        int col;
+        int height;
+        public Cell(int r, int c, int h) {
+            this.row = r;
+            this.col = c;
+            this.height = h;
+        }
+        @Override
+        public int compareTo(@NotNull Cell other) {
+            return this.height - other.height;
+        }
+    }
     public static void main(String[] args) {
         TrappingWater tw = new TrappingWater();
-        tw.testByStack();
+
+        //tw.testByStack();
+        tw.solveBoard();
 
     }
+
+    private void solveBoard() {
+        char[][] board = {{'X','X','X','X'},{'X','O','O','X'},{'X','X','O','X'},{'X','O','X','X'}};
+        solve(board);
+    }
+
+    public void solve(char[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+        for(int i = 0; i < m ; i++) {
+            for(int j = 0; j < n; j++) {
+                if(board[i][j] == 'O') {
+                    dfs(i, j, board);
+                }
+            }
+        }
+        for(int i = 0; i < m ; i++) {
+            for(int j = 0; j < n; j++) {
+                if(board[i][j] == 'v') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private boolean dfs(int i, int j, char[][] board) {
+        if(i == 0 || i == board.length-1 || j == 0|| j == board[0].length) {
+            board[i][j] = 'v';
+            return true;
+        }
+        board[i][j] = 'p';
+        int[][] dirs = {{-1,0}, {0,-1},{0,1},{1,0}};
+        boolean touchesBoundry =false;
+        for(int[] dir: dirs) {
+            int row = i + dir[0];
+            int col = j + dir[1];
+            if(row < 0 || row >= board.length
+                    || col < 0 || col >= board[0].length
+                    || board[row][col] != 'O') {
+                continue;
+            }  else if(board[row][col] == 'O'){
+                //board[i][j] = 'p';
+                touchesBoundry = dfs(row, col, board);
+            }
+
+        }
+        board[i][j]  = touchesBoundry ? 'v' : 'X';
+        return touchesBoundry;
+    }
+
 
     private void testByStack() {
         int[] height = {0,1,0,2,1,0,1,3,2,1,2,1};
@@ -154,5 +221,44 @@ public class TrappingWater {
 
         int start = search(left - 1, a, modulus, n, nums);
         return S.substring(start, start + left - 1);
+    }
+
+
+    private int trappingWater3d(int[][] heightMap) {
+        int result = 0;
+        if(heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
+            return result;
+        }
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+        PriorityQueue<Cell> queue = new PriorityQueue<>();
+        boolean[][] visited = new boolean[heightMap.length][heightMap[0].length];
+        for(int i = 0; i < m; i++) {
+            queue.offer(new Cell(i, 0, heightMap[i][0]));
+            visited[i][0] = true;
+            queue.offer(new Cell(i, n-1, heightMap[i][n-1]));
+            visited[i][n-1] = true;
+        }
+        for(int j = 1; j < n-1; j++) {
+            queue.offer(new Cell(0, j, heightMap[0][j]));
+            visited[0][j] = true;
+            queue.offer(new Cell(m-1, j, heightMap[m-1][j]));
+            visited[m-1][j] = true;
+        }
+        int[][] DIRS = {{-1, 0} , {0, 1}, {1, 0}, {0, -1}};
+        while(!queue.isEmpty()) {
+            Cell cell = queue.poll();
+            for(int[] dir : DIRS) {
+                int nRow = cell.row + dir[0];
+                int nCol = cell.col + dir[1];
+                if(nRow < 0 || nRow >= m || nCol < 0 || nCol >= n || visited[nRow][nCol]) {
+                    continue;
+                }
+                result += Math.max(0, cell.height - heightMap[nRow][nCol]);
+                queue.offer(new Cell(nRow, nCol, Math.max(cell.height, heightMap[nRow][nCol])));
+                visited[nRow][nCol] = true;
+            }
+        }
+        return result;
     }
 }
