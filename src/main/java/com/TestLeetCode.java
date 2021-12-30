@@ -1,13 +1,22 @@
 package com;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TestLeetCode {
+
+    private static final Map<Character, String> seasonMap = ImmutableMap.<Character, String>builder()
+            .put('1', "ONE")
+            .put('2', "TWO")
+            .put('3', "THREE").build();
+
 
     public static void main(String[] args) {
         TestLeetCode tlc = new TestLeetCode();
