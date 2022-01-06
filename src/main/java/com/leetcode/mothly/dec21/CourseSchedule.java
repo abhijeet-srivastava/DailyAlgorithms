@@ -3,6 +3,7 @@ package com.leetcode.mothly.dec21;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CourseSchedule {
     public static void main(String[] args) {
@@ -267,6 +268,26 @@ public class CourseSchedule {
         } else {
             return String.valueOf(operand1 *operand2);
         }
-
+    }
+    public boolean asteroidsDestroyed(int mass, int[] asteroids) {
+        TreeMap<Integer, Long> astCnt
+                = IntStream.of(asteroids).mapToObj(Integer::valueOf)
+                .collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+        //TreeSet<Integer> ast = IntStream.of(asteroids).mapToObj(Integer::valueOf).collect(Collectors.toCollection(TreeSet::new));
+        while(astCnt.size() > 0) {
+            Integer next = astCnt.floorKey(mass);
+            System.out.printf("For mass[%d] gpt key: %s\n", mass, next == null ? "NULL": (next + " = " + astCnt.get(next)));
+            if(next == null) {
+                break;
+            }
+            mass += next;
+            long remaining = astCnt.get(next) - 1;
+            if(remaining == 0) {
+                astCnt.remove(next);
+            } else {
+                astCnt.put(next, remaining);
+            }
+        }
+        return astCnt.isEmpty();
     }
 }
