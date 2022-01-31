@@ -1,13 +1,8 @@
 package com.oracle.casb.leetcode;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -15,6 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Created By : abhijsri
@@ -341,6 +337,104 @@ public class Contest111 {
         }
     }
 
+    private int[] selectKItems(int stream[],  int k) {
+        Random rand = new Random();
+        int[] reservoir = new int[k];
+        int i = 0;
+        while(i < k) {
+            reservoir[i] = stream[i];
+            i += 1;
+        }
+        while(i < stream.length) {
+            int reservoirIndex = rand.nextInt(k);
+            reservoir[reservoirIndex] = stream[i];
+            i += 1;
+        }
+        return reservoir;
+    }
+    public String alienOrder(String[] words) {
+        Map<Character, Set<Character>> orderMap = new HashMap<>();
+        Map<Character, Integer> indegree = new HashMap<>();
+        for(String word: words) {
+            for(char ch : word.toCharArray()) {
+                orderMap.put(ch, new HashSet<Character>());
+                indegree.put(ch, 0);
+            }
+        }
+        Set<String> seen = new HashSet<>();
+        for(int i = 1; i < words.length; i++) {
+            String successor = words[i];
+            String predecessor = words[i-1];
+            if(successor.length() < predecessor.length()
+                    && predecessor.startsWith(successor)) {
+                return "";
+            }
+            for(int j = 0 ;j < Math.min(successor.length(), predecessor.length()); j++) {
+                if(successor.charAt(j) == predecessor.charAt(j)) {
+                    continue;
+                }
+                Character preceeds = predecessor.charAt(j);
+                Character succeeds = successor.charAt(j);
+                String key = preceeds + "_" + succeeds;
+                String reverse = succeeds + "_" + preceeds;
+                if(seen.contains(reverse)) {
+                    return "";
+                }else if(seen.contains(key)) {
+                    break;
+                }
+
+                seen.add(key);
+                orderMap.get(preceeds).add(succeeds);
+                indegree.put(succeeds, indegree.get(succeeds) + 1);
+                break;
+            }
+        }
+        Queue<Character> queue = new LinkedList<>();
+        for(Map.Entry<Character, Integer> entry : indegree.entrySet()) {
+            if(entry.getValue() == 0) {
+                queue.offer(entry.getKey());
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!queue.isEmpty()) {
+            Character current = queue.poll();
+            sb.append(current);
+            for(Character next : orderMap.get(current)) {
+                indegree.put(next, indegree.get(next)-1);
+                if(indegree.get(next) == 0) {
+                    queue.offer(next);
+                }
+            }
+        }
+        return sb.length() < orderMap.size() ? "" : sb.toString();
+    }
+
+    public static int findIndex(int[] nums) {
+        Random random = new Random();
+        Map<Integer, Long> frequencyMap = IntStream
+                .of(nums).mapToObj(Integer::valueOf)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        int maxFrequencyElement = nums[0];
+        for(Map.Entry<Integer, Long> entry: frequencyMap.entrySet()) {
+            if(entry.getValue() > frequencyMap.get(maxFrequencyElement)) {
+                maxFrequencyElement = entry.getKey();
+            }
+        }
+        int maxFrequency = frequencyMap.get(maxFrequencyElement).intValue();
+        //Generate random number between
+        int rand = random.nextInt(maxFrequency);
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] == maxFrequencyElement) {
+                if(rand == 0) {
+                    return i;
+                } else {
+                    rand -= 1;
+                }
+            }
+        }
+        //System.out.printf("Nums: [%s]\n", IntStream.of(nums).mapToObj(String::valueOf).collect(Collectors.joining(", ")));
+        return 0;
+    }
     /**
      * Definition for singly-linked list.
     */

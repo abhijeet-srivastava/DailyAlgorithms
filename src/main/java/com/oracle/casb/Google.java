@@ -29,39 +29,47 @@ public class Google {
         int k = 3;*/
         int[] arr = {1,1,8,1,2,2,2,3,1};
         int k = 4;
-        int max = maxSweetness(arr, k);
+        int max = maximizeSweetness(arr, k);
         System.out.printf("Max Sweetness :%d\n", max);
     }
 
-    private int maxSweetness(int[] chocolate, int k) {
-        int sum = IntStream.of(chocolate).sum();
-        int avg = sum/k;
-        int hi = avg;
-        int lo = 1;
-        int mid = lo + (hi-lo)/2;//Lowest possible Sweetness
-        while(lo < hi) {
-            int portions = 1;
-            //Task is to find k-1 portion having remaining average
-            int currentSweetness = 0;
-            java.util.List<Integer> sweetNess = new ArrayList<>();
-            for(int portionIndex = 0; portionIndex < chocolate.length; portionIndex++) {
-                currentSweetness += chocolate[portionIndex];
-                if(currentSweetness  > mid) {
-                    sweetNess.add(currentSweetness);
-                    currentSweetness = 0;
-                    portions += 1;
-                }
-            }
-            if(portions == k) {
-                break;
-            } else if(portions > k) {//More portions; Increment Own piece sweetness
-                lo = mid+1;
-            } else {//Less Portions, Decrement;Yours sweetness
-                hi = mid;
-            }
-            mid = lo + (hi-lo)/2;//Lowest possible Sweetness
+    public int maximizeSweetness(int[] sweetness, int k) {
+        int left = Integer.MAX_VALUE;
+        int right = 0;
+        for(int sweetVal : sweetness) {
+            left = Math.min(left, sweetVal);
+            right += sweetVal;
         }
-        return mid;
+        right /= (k+1);
+        //System.out.printf("For min:6 counts: %d\n", getCounts(6, sweetness));
+        //int left = 1;//right/(sweetness.length);
+        while(left < right) {
+            int mid = (left+right+1)/2;
+            //int mid = (left+right+1)/2;
+            int counts = getCounts(mid, sweetness);
+            //System.out.printf("Left: %d, Right: %d, mid: %d counts: %d\n", left, right, mid, counts);
+            if(counts >= (k+1)) {
+                left = mid;
+            } else {
+                right = mid-1;
+            }
+        }
+        return left;
+    }
+
+    private int getCounts(int k, int[] sweetness) {
+        int count = 0;
+        int currSweetNess = 0;
+        for(int i = 0; i < sweetness.length; i++) {
+            currSweetNess += sweetness[i];
+            if(currSweetNess >= k) {
+                //System.out.printf("Min: %d,At index i: %d, currSweetNess: %d\n",k, i, currSweetNess);
+                count += 1;
+                currSweetNess = 0;
+            }
+        }
+        //System.out.printf("For max sweetness: %d, counts: %d\n", k, count);
+        return count;
     }
     /**
      * https://community.topcoder.com/stat?c=problem_statement&pm=1901&rd=4650

@@ -1,8 +1,6 @@
 package com.walmart;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -12,10 +10,62 @@ public class LongestIncrList {
         LongestIncrList lil = new LongestIncrList();
         //lil.testCiel();
 
-        String res = lil.customSortString("exv", "xwvee");
-        System.out.println(res);
+        //String res = lil.customSortString("exv", "xwvee");
+        //System.out.println(res);
+        //int[] nums = {1,1};
+        //List<Integer> res = lil.maxScoreIndices(nums);
+        String str = lil.subStrHash("leetcode", 7, 20, 2, 0);
     }
 
+    public String subStrHash(String s, int power, int mod, int k, int hashValue) {
+        int hv = 0;
+        int pow = 1;
+        int len = s.length();
+        int[] arr = new int[len-k];
+        for(int i = 0; i < k; i++) {
+            int val = s.charAt(len-i-1) - 'a' + 1;
+            hv = ((hv*power)%mod + val)%mod;
+            pow *= power;
+        }
+        pow /= power;
+        pow %= mod;
+        arr[len - k - 1] = hv;
+        for(int i = len-k-2; i >= 0; i--) {
+            int oow = s.charAt(i+k+1) - 'a' + 1;
+            hv = (hv - oow*pow)%mod;
+            hv += (s.charAt(i) - 'a' + 1);
+            arr[i] = hv;
+        }
+        for(int i = 0; i < arr.length; i++) {
+            if(arr[i] == hashValue) {
+                return s.substring(i, i+k);
+            }
+        }
+        return "";
+    }
+    public List<Integer> maxScoreIndices(int[] nums) {
+        int[] arr = new int[nums.length+1];
+        for(int i = 1; i <= nums.length; i++) {
+            int val = (nums[i-1] == 0) ? 1 : 0 ;
+            arr[i] = arr[i-1] + val;
+        }
+        int[] right = new int[nums.length+1];
+        for(int i = nums.length-1; i >= 0; i--) {
+            int val = nums[i] == 1 ? 1:0;
+            right[i] = right[i+1] + val;
+        }
+        for(int i = 0; i <= nums.length; i++) {
+            arr[i] += right[i];
+        }
+        int max = IntStream.of(arr).max().getAsInt();
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++) {
+            if(arr[i] == max) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
     private void testCiel() {
         int arr[] = { 2, 5, 3, 7, 11, 8, 10, 13, 6 };
         //int arr[] = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15};
