@@ -261,4 +261,9 @@ public class TrappingWater {
         }
         return result;
     }
+    public boolean canReorderDoubled(int[] arr) {
+        Integer[] array = IntStream.of(arr).mapToObj(Integer::valueOf).toArray(Integer[]::new);
+        Arrays.sort(array, Comparator.comparingInt(Math::abs));
+        return true;
+    }
 }

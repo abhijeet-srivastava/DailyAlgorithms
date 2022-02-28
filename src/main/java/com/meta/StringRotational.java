@@ -17,7 +17,72 @@ public class StringRotational {
             System.out.printf("As number: %d\n", digit);
         }*/
         //sr.testRotation();
-        sr.testMissingPosetiveNumber();
+        //sr.testMissingPosetiveNumber();
+        //sr.testNextHighestNum();
+        sr.testRemoveDuplicates();
+    }
+
+    private void testRemoveDuplicates() {
+        //int[] nums = {0,0,1,1,1,1,2,3,3};
+        int[] nums = {1,2,2,2,3,4,4,4,5};
+        int res  = removeDuplicates2(nums);
+        for(int i = 0; i < res; i++) {
+            System.out.printf("%d ", nums[i]);
+        }
+        System.out.println();
+    }
+
+    private void testNextHighestNum() {
+        String s = "61892795431";
+        String st = nextHigest(s, 4);
+        System.out.printf("%s ==> %s\n", s, st);
+    }
+
+    public int removeDuplicates(int[] nums) {
+        int i = 0;
+        for(int n : nums)
+            if(i < 1 || n > nums[i - 1])
+                nums[i++] = n;
+        return i;
+    }
+    public int removeDuplicates2(int[] nums) {
+        int i = 0;
+        for(int num: nums) {
+            if(i < 2 || num > nums[i-2]) {
+                nums[i] = num;
+                i += 1;
+            }
+        }
+        return i;
+    }
+    private String nextHigest(String s, int k) {
+        int[] nums = new int[s.length()];
+        for(int i = 0; i < s.length(); i++) {
+            nums[i] = Character.getNumericValue(s.charAt(i));
+        }
+        for(int i = 0; i < s.length(); i++) {
+            int highest = i;
+            for(int j = i; j < s.length(); j++) {
+                if(nums[j] >= nums[highest]) {
+                    highest = j;
+                }
+            }
+            if(nums[i] >= nums[highest]) {
+                continue;
+            }
+            swap(nums, i, highest);
+            k -= 1;
+            if(k == 0) {
+                break;
+            }
+        }
+        return IntStream.of(nums).mapToObj(String::valueOf).collect(Collectors.joining());
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 
     private void testMissingPosetiveNumber() {

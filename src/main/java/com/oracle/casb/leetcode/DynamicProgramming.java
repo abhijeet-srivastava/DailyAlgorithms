@@ -3,16 +3,9 @@ package com.oracle.casb.leetcode;
 import com.google.common.collect.ImmutableMap;
 import com.oracle.casb.common.ListNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -543,5 +536,69 @@ public class DynamicProgramming {
             }
         }
         return maxLen;
+    }
+
+    class Transaction {
+        String name;
+        int timeStamp;
+        int txnValue;
+        String city;
+        public Transaction(String txStr) {
+            String[] values = txStr.split(",");
+            this.name = values[0];
+            this.timeStamp = Integer.valueOf(values[1]);
+            this.txnValue = Integer.valueOf(values[2]);
+            this.city = values[3];
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getTimeStamp() {
+            return timeStamp;
+        }
+
+        private boolean isValid() {
+            return this.txnValue <= 1000;
+        }
+        @Override
+        public String toString() {
+            return "%s,%d,%d,%s".format(name, timeStamp, txnValue, city);
+        }
+    }
+    public List<String> invalidTransactions(String[] transactions) {
+        List<Transaction> txns
+                = Arrays.stream(transactions).map(e -> new Transaction(e))
+                .collect(Collectors.toList());
+        Predicate<Transaction> notValid = (Transaction txn) -> !txn.isValid();
+        Set<String> invalid
+                = txns.stream()
+                .filter(((Predicate<Transaction>) Transaction::isValid).negate())
+                .map(Transaction::toString)
+                .collect(Collectors.toSet());
+        Map<String, List<Transaction>> groupByName
+                = txns.stream()
+                .filter(Transaction::isValid)
+            .collect(Collectors.groupingBy(Transaction::getName));
+        for(List<Transaction> txnList : groupByName.values()) {
+            Collections.sort(txnList, Comparator.comparingInt(Transaction::getTimeStamp));
+            int index = 0;
+            while(index < txnList.size()-1) {
+                Transaction current = txnList.get(index);
+                for (int i = index+1; i < txnList.size(); i++) {
+                    if(!current.city.equals(txnList.get(i).city)) {
+                        continue;
+                    } else if((txnList.get(i).timeStamp - current.timeStamp) > 60) {
+                        index = i;
+                        break;
+                    } else {
+                        invalid.add(current.toString());
+                        invalid.add(txnList.get(i).toString());
+                    }
+                }
+            }
+        }
+        return invalid.stream().collect(Collectors.toList());
     }
 }

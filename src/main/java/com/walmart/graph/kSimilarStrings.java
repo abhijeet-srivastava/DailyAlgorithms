@@ -1,4 +1,4 @@
-package com.meta;
+package com.walmart.graph;
 
 import java.util.HashMap;
 import java.util.Map;

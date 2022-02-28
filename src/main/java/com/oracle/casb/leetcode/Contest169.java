@@ -406,7 +406,7 @@ public class Contest169 {
             t2 = t3;
              i-= 1;
         }
-        //t1.next = null;
+        //LeetCode278.next = null;
         head.next = nxt;
         return t1;
     }

@@ -167,9 +167,9 @@ public class Contest111 {
         }
 
         public boolean overLaps(Task t) {
-            /*int t1 = Math.max(start, t.start);
+            /*int LeetCode278 = Math.max(start, t.start);
             int t2 = Math.min(end, t.end);
-            return t1 <= t2;*/
+            return LeetCode278 <= t2;*/
             /*int cen1 = start + end;
             int cen2 = t.start + t.end;
             int rad1 = end -start;
