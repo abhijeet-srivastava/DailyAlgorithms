@@ -214,5 +214,23 @@ public class LongestIncrList {
         }
         return val;
     }
+
+    public int minMeetingRooms(int[][] intervals) {
+        int len = intervals.length;
+        if(len == 1) {
+            return 1;
+        }
+        int[][] timeline = new int[2*len][2];
+        for(int i = 0; i < len; i += 1) {
+            timeline[2*i][0] = intervals[i][0];
+            timeline[2*i][1] = -1;
+
+            timeline[2*i+1][0] = intervals[i][1];
+            timeline[2*i+1][1] = 1;
+        }
+        int count = 0;
+        Arrays.sort(timeline, Comparator.comparingInt((int[] arr) -> arr[0]).thenComparing((int[] arr) -> arr[1]));
+        return count;
+    }
 }
 
