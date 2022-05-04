@@ -31,6 +31,7 @@ public class FileSystem {
             }
             System.out.printf("On level: %s\n", subDir);
             if(!current.childrens.containsKey(subDir)) {
+                //current.childrens.compute("", (k, v) -> v == null ? new Directory("a"): new Directory("b"));
                 exists = false;
                 break;
             }

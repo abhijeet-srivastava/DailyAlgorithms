@@ -1,8 +1,11 @@
 package com.leetcode.contests.contest264.april22;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class LeetCodeApril {
 
@@ -11,7 +14,141 @@ public class LeetCodeApril {
         //lca.testKClosest();
         //lca.testEncoded();
         //lca.testCircularSum();
-        lca.testReplacement();
+        //lca.testReplacement();
+        //lca.testMaxEquation();
+        //lca.testSlidingWinMax();
+        lca.testTaskAssign();
+        //lca.testKthLargest();
+    }
+
+    private void testKthLargest() {
+        int[] arr = {4, 5, 8, 2,3,5,10,9,4};
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int num : arr) {
+            pq.offer(num);
+            if(pq.size() > 3) {
+                pq.remove();
+            }
+            System.out.printf("3rd largest: %d\n", pq.peek());
+        }
+    }
+
+    private void testTaskAssign() {
+        /*int[] tasks = {5,9,8,5,9};
+        int[] workers = {1,6,4,2,6};
+        int pill = 1,  strength = 5;*/
+        int[] tasks = {3,2,1};
+        int[] workers = {0,3,3};
+        int pill = 1,  strength = 1;
+        int task = maxTaskAssign(tasks, workers, 1,5);
+        System.out.printf("count: %d\n", task);
+    }
+
+    public int maxTaskAssign1(int[] tasks, int[] workers, int pills, int strength) {
+        int left = 0, right = Math.min(tasks.length, workers.length);
+        Arrays.sort(tasks);
+        Arrays.sort(workers);
+        int ans = left;
+        while(left <= right) {
+            int mid = left + (right - left)/2;
+            if(canAssign1(mid, tasks, workers, pills, strength)) {
+                ans = mid;
+                left = mid+1;
+            } else {
+                right = mid-1;
+            }
+        }
+        return ans;
+    }
+
+    public int maxTaskAssign(int[] tasks, int[] workers, int pills, int strength) {
+        int left = 0, right = Math.min(tasks.length, workers.length);
+        Arrays.sort(tasks);
+        Arrays.sort(workers);
+        /*TreeMap<Integer, Long> workerCount = Arrays.stream(workers)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));*/
+
+        int ans = left;
+        while(left <= right) {
+            int mid = left + (right - left)/2;
+            if(canAssign1(mid, tasks, workers, pills, strength)) {
+                ans = mid;
+                left = mid+1;
+            } else {
+                right = mid-1;
+            }
+        }
+        return ans;
+    }
+    private boolean canAssign(int reqCount, int[] tasks, int[] workers, int pills, int strength) {
+        int wi = workers.length-1;
+        Deque<Integer> dq = new ArrayDeque<>();
+        for(int ti = reqCount-1; ti >= 0; ti--) {
+            while (wi >= workers.length - reqCount
+                    && workers[wi] + strength >= tasks[ti]) {
+                dq.offerLast(workers[wi]);
+                wi -= 1;
+            }
+            if(dq.isEmpty()) {
+                return false;
+            } else if(dq.peekFirst() >= tasks[ti]) {
+                dq.pollFirst();
+            } else if(pills > 0) {
+                dq.pollLast();
+                pills -= 1;
+            } else  {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean canAssign1(int count, int[] tasks, int[] workers, int pills, int strength){
+        Deque<Integer> dq = new ArrayDeque<>();
+        int ind = workers.length - 1;
+        for (int i = count - 1; i >= 0; i--) {
+            while(ind >= workers.length-count
+                    && workers[ind]+strength>=tasks[i]) {
+                dq.offerLast(workers[ind]);
+                ind--;
+            }
+            if(dq.isEmpty())
+                return false;
+            if(dq.peekFirst()>=tasks[i]) {
+                dq.pollFirst();
+            } else {
+                dq.pollLast();
+                pills--;
+                if(pills<0)return false;
+            }
+        }
+        return true;
+    }
+
+    private void testSlidingWinMax() {
+        //int[] arr = {1,3,-1,-3,5,3,6,7};
+        //PriorityQueue<Integer> pq = new PriorityQueue<>();
+        /*PriorityQueue<Integer> possibleRewards =
+                IntStream.of(tasks).boxed()
+                        .collect(Collectors.toCollection(PriorityQueue::new)); */
+        /*for(int task : tasks) {
+            pq.offer(task);
+        }*/
+
+        int[] arr = {1,-1};
+        int[] res = maxSlidingWindow(arr, 1);
+        System.out.printf("[%s]\n", IntStream.of(res).mapToObj(String::valueOf).collect(Collectors.joining(", ")));
+    }
+
+    private void testMaxEquation() {
+        int[][] arr = {
+                {-19,-12},{-13,-18},{-12,18},{-11,-8},{-8,2},{-7,12},{-5,16},
+                {-3,9},{1,-7},{5,-4},{6,-20},{10,4},{16,4},{19,-9},{20,19}
+        };
+        int k = 6;
+        int findMax = findMaxValueOfEquation(arr, k);
+        System.out.printf("Max: %d\n", findMax);
     }
 
     private void testReplacement() {
@@ -19,6 +156,51 @@ public class LeetCodeApril {
         System.out.printf("Max: %d\n",max);
     }
 
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int len = nums.length;
+        int[] res = new int[len-k+1];
+        Deque<Integer> dq = new ArrayDeque<>();
+        for(int i = 0; i < len; i++) {
+            while(!dq.isEmpty() && (i - dq.peekLast()) >= k) {
+                dq.pollLast();
+            }
+            while (!dq.isEmpty() && nums[dq.peekFirst()] <= nums[i]) {
+                dq.pollFirst();
+            }
+            dq.offerFirst(i);
+            if(i-k+1 >= 0) {
+                res[i-k+1] = nums[dq.peekLast()];
+            }
+        }
+        return res;
+    }
+
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        Deque<Integer> dq = new ArrayDeque<>();
+        int max = Integer.MIN_VALUE;
+        for(int i = 0; i < points.length; i++) {
+            while(!dq.isEmpty()
+                    && (points[i][0] - points[dq.peekLast()][0]) > k)  {
+                dq.pollLast();
+            }
+            if(!dq.isEmpty()) {
+                int least = dq.peekLast();
+                max = Math.max(max,
+                        points[i][0] + points[i][1]
+                                - (points[least][0] - points[least][1]));
+            }
+            int currVal = points[i][0] - points[i][1];
+            int front = dq.isEmpty() ? -1 : dq.peekFirst();
+            System.out.printf("Current: %d\n", (points[i][0] - points[i][1]));
+            while(!dq.isEmpty() && currVal <= (points[front][0] - points[front][1])) {
+                System.out.printf("Front: %d\n", (points[front][0] - points[front][1]));
+                dq.pollFirst();
+                front = dq.isEmpty() ? -1 : dq.peekFirst();
+            }
+            dq.offerFirst(i);
+        }
+        return max;
+    }
     private void testCircularSum() {
         int[] arr = {-3,-2,-3};
         int sum = maxSubarraySumCircular(arr);
@@ -50,16 +232,12 @@ public class LeetCodeApril {
     }
 
     private boolean isValid(Map<Character, Integer> counter, int k) {
-        if(counter.size() > 2) {
-            return false;
-        } else if(counter.size() < 2) {
-            return true;
-        }
-        int min = Integer.MAX_VALUE;
+        int max = 0, total = 0;
         for(int value: counter.values()) {
-            min = Math.min(min, value);
+            max = Math.max(max, value);
+            total += value;
         }
-        return min <= k;
+        return (total - max) <= k;
     }
     private void testEncoded() {
         String s = "aabcaabcd";
@@ -275,6 +453,25 @@ public class LeetCodeApril {
             if(sum[i] > 0) {
                 deque.offer(i);
             }
+        }
+        return res;
+    }
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> counter = new HashMap<>();
+        for(int num : nums) {
+            counter.merge(num, 1, Integer::sum);
+        }
+        PriorityQueue<Map.Entry<Integer, Integer>> pq
+                = new PriorityQueue<>(Comparator.comparingInt(Map.Entry::getValue));
+        for(Map.Entry<Integer, Integer> entry: counter.entrySet()) {
+            pq.offer(entry);
+            if(pq.size() > k) {
+                pq.remove();
+            }
+        }
+        int[] res = new int[k];
+        for(int i = 0; i < k; i++) {
+            res[i] = pq.remove().getKey();
         }
         return res;
     }

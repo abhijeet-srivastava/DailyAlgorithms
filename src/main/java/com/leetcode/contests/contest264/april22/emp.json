@@ -1,0 +1,156 @@
+{
+  "employees": [
+    {
+      "id": 0,
+      "name": "The Boss",
+      "manager_id": null
+    },
+    {
+      "id": 1,
+      "name": "Aiden",
+      "manager_id": 0
+    },
+    {
+      "id": 2,
+      "name": "Aiden",
+      "manager_id": 1
+    },
+    {
+      "id": 3,
+      "name": "Logan",
+      "manager_id": 1
+    },
+    {
+      "id": 4,
+      "name": "Logan",
+      "manager_id": 0
+    },
+    {
+      "id": 5,
+      "name": "Lucas",
+      "manager_id": 1
+    },
+    {
+      "id": 6,
+      "name": "Jackson",
+      "manager_id": 3
+    },
+    {
+      "id": 7,
+      "name": "Alexander",
+      "manager_id": 6
+    },
+    {
+      "id": 8,
+      "name": "Henry",
+      "manager_id": 6
+    },
+    {
+      "id": 9,
+      "name": "Lucas",
+      "manager_id": 7
+    },
+    {
+      "id": 10,
+      "name": "James",
+      "manager_id": 7
+    },
+    {
+      "id": 11,
+      "name": "Matthew",
+      "manager_id": 8
+    },
+    {
+      "id": 12,
+      "name": "William",
+      "manager_id": 11
+    },
+    {
+      "id": 13,
+      "name": "Aiden",
+      "manager_id": 9
+    },
+    {
+      "id": 14,
+      "name": "Alexander",
+      "manager_id": 13
+    },
+    {
+      "id": 15,
+      "name": "Elijah",
+      "manager_id": 11
+    },
+    {
+      "id": 16,
+      "name": "Henry",
+      "manager_id": 15
+    },
+    {
+      "id": 17,
+      "name": "Alexander",
+      "manager_id": 16
+    },
+    {
+      "id": 18,
+      "name": "Jack",
+      "manager_id": 15
+    },
+    {
+      "id": 19,
+      "name": "Samuel",
+      "manager_id": 18
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "Department N.6",
+      "department_head_id": 6
+    },
+    {
+      "id": 2,
+      "name": "Department N.8",
+      "department_head_id": 8
+    },
+    {
+      "id": 3,
+      "name": "Department N.12",
+      "department_head_id": 12
+    },
+    {
+      "id": 4,
+      "name": "Department N.4",
+      "department_head_id": 4
+    },
+    {
+      "id": 5,
+      "name": "Department N.11",
+      "department_head_id": 11
+    },
+    {
+      "id": 6,
+      "name": "Department N.13",
+      "department_head_id": 13
+    },
+    {
+      "id": 7,
+      "name": "Department N.3",
+      "department_head_id": 3
+    },
+    {
+      "id": 8,
+      "name": "Department N.18",
+      "department_head_id": 18
+    },
+    {
+      "id": 9,
+      "name": "Department N.1",
+      "department_head_id": 1
+    },
+    {
+      "id": 10,
+      "name": "Department N.14",
+      "department_head_id": 14
+    }
+  ]
+}
