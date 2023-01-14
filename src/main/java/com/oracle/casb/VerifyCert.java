@@ -1,6 +1,6 @@
 package com.oracle.casb;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+//import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -19,11 +19,11 @@ public class VerifyCert {
     }
 
     private void verify() throws CertificateException, NoSuchAlgorithmException {
-        byte[] array = "some Random String".getBytes();
+        /*byte[] array = "some Random String".getBytes();
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509", new BouncyCastleProvider());
         InputStream is = new ByteArrayInputStream(array);
         CertPath certPath = certificateFactory.generateCertPath(is, "PKCS7"); // Throws Certificate Exception when a cert path cannot be generated
-        CertPathValidator certPathValidator = CertPathValidator.getInstance("PKIX", new BouncyCastleProvider());
+        CertPathValidator certPathValidator = CertPathValidator.getInstance("PKIX", new BouncyCastleProvider());*/
         /*PKIXParameters parameters = new PKIXParameters(KeyTool.getCacertsKeyStore());
 
         PKIXCertPathValidatorResult validatorResult = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, parameters);*/

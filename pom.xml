@@ -11,8 +11,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -81,14 +81,9 @@
           <scope>compile</scope>
       </dependency>
       <dependency>
-          <groupId>com.walmart.platform.security.iam</groupId>
-          <artifactId>platform-iam-samples</artifactId>
-          <version>4.0.21</version>
-      </dependency>
-      <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
-          <version>1.18.12</version>
+          <version>1.18.22</version>
           <!--<scope>provided</scope>-->
       </dependency>
       <dependency>
