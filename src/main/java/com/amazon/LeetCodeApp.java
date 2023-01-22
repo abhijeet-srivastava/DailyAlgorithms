@@ -13,7 +13,17 @@ public class LeetCodeApp {
         //lca.testNextMeetingRoom();
         //lca.testCountIntervals();
         //lca.testMaxJumps();
-        lca.testTrie();
+        //lca.testTrie();
+        lca.testIpToCdr();
+    }
+
+    private void testIpToCdr() {
+        //String ip = "117.145.102.62";//8
+        //String ip = "0.0.0.0"; //2
+        //String ip = "255.0.0.7";//10
+        String ip = "60.166.253.147";//12
+        List<String> res = ipToCIDR(ip, 12);
+        System.out.printf("%s\n", res.stream().collect(Collectors.joining(", ", "[", "]")));
     }
 
     private void testTrie() {
@@ -312,6 +322,94 @@ public class LeetCodeApp {
         }
         sb.append(len-4);
         return sb.toString();
+    }
+    public List<String> ipToCIDR(String ip, int n) {
+        TreeSet<Integer> set = new TreeSet<>(Arrays.asList(1, 2, 4, 8, 16, 32, 64, 128, 256));
+        int lastIndex = ip.lastIndexOf('.');
+        String lastPart = ip.substring(lastIndex+1);
+        int current = Integer.valueOf(lastPart);
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb.append(ip.substring(0, lastIndex+1));
+        int toCover = n;
+        while(toCover > 0) {
+            int next = set.higher(current);
+            int diff = next-current;
+            int covered = Math.min(diff, toCover);
+            covered = set.floor(covered);
+            int bitsMasked = Integer.toBinaryString(covered).length() - 1;
+            int mask = 32 - bitsMasked;
+            sb.append(current);
+            sb.append('/');
+            sb.append(mask);
+            res.add(sb.toString());
+            sb.setLength(lastIndex+1);
+            current += covered;
+            toCover -= covered;
+        }
+        return res;
+    }
+
+    private void backtrack(String s, int prevIndex, int pendingDots, List<String> result, List<String> segments) {
+        int maxPos = Math.min(prevIndex+4, s.length()-1);
+        for (int currPos = prevIndex+1; currPos < maxPos; currPos++) {
+            String segment = s.substring(prevIndex+1, currPos+1);
+            if (isValid(segment)) {
+                segments.add(segment);
+                if (pendingDots == 1) {
+                    String lastSeg = s.substring(currPos+1);
+                    if (isValid(lastSeg)) {
+                        segments.add(s.substring(currPos+1));
+                        result.add(segments.stream().collect(Collectors.joining(".")));
+                        segments.remove(segments.size() - 1);
+                    }
+                } else {
+                    backtrack(s, currPos, pendingDots - 1, result, segments);
+                }
+                segments.remove(segments.size() - 1);
+            }
+        }
+    }
+    private boolean isValid(String segment) {
+        int m = segment.length();
+        if (m > 3) {
+            return false;
+        }
+        return (segment.charAt(0) != '0') ? (Integer.valueOf(segment) <= 255) : (m == 1);
+    }
+
+    private List<List<String>> allPalindromeStrings(String s){
+        List<List<String>> result = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+        backtrack(0, s, current, result);
+        return result;
+    }
+
+    private void backtrack(int start, String s, List<String> current, List<List<String>> result) {
+        if(start >= s.length()) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        for(int end = start; end < s.length(); end++) {
+            if(isValidPalindrome(s, start, end)) {
+                current.add(s.substring(start, end));
+                backtrack(end+1, s, current, result);
+                current.remove(current.size()-1);
+            }
+        }
+    }
+
+    private boolean isValidPalindrome(String s, int start, int end) {
+        boolean isValid = true;
+        while(start < end) {
+            if(s.charAt(start) != s.charAt(end)) {
+                isValid = false;
+                break;
+            }
+            start += 1;
+            end -= 1;
+        }
+        return isValid;
     }
 
 }
