@@ -14,7 +14,14 @@ public class LeetCodeApp {
         //lca.testCountIntervals();
         //lca.testMaxJumps();
         //lca.testTrie();
-        lca.testIpToCdr();
+        //lca.testIpToCdr();
+        lca.testJudge();
+    }
+
+    private void testJudge() {
+        int[][] trust = {{1,2}, {2,3}};//2
+        int judge = findJudge(3, trust);
+        System.out.printf("Judge: %d\n", judge);
     }
 
     private void testIpToCdr() {
@@ -410,6 +417,21 @@ public class LeetCodeApp {
             end -= 1;
         }
         return isValid;
+    }
+    public int findJudge(int n, int[][] trust) {
+        int[] degree = new int[n+1];
+        for(int[] tr: trust) {
+            degree[tr[0]] -= 1;//Out degree
+            degree[tr[1]] += 1;//Indegree
+        }
+        int res = -1;
+        for(int i =1; i <= n; i++) {
+            if(degree[i] == n-1) {
+                res = i;
+                break;
+            }
+        }
+        return res;
     }
 
 }
