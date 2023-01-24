@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Contest139 {
     public static void main(String[] args) {
         Contest139 ct =new Contest139();
+        String[] arr = ":2001:0db8:85a3:0:0:8A2E:0370:7334:".split(":");
         ct.testDivides();
     }
 
