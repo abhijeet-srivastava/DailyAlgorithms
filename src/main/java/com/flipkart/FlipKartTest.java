@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -228,5 +230,30 @@ public class FlipKartTest {
             list.add(index[i], nums[i]);
         }
         return list.stream().mapToInt(Integer::valueOf).toArray();
+    }
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        Set[] GRAPH = new HashSet[n];
+        for(int i = 0; i < n; i++) {
+            GRAPH[1] = new HashSet<int[]>();
+        }
+        for(int[] flight: flights) {
+            GRAPH[flight[0]].add(new int[]{flight[1], flight[2]});
+        }
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.<int[]>comparingInt(p ->p[0]));
+        pq.offer(new int[]{0, src, k+1});
+        while (!pq.isEmpty()){
+            int[] currentNode = pq.poll();
+            int priceFromSource = currentNode[0], city = currentNode[1], remainingHopsToDest = k+1;
+            if(city == dst) {
+                return priceFromSource;
+            } else if(remainingHopsToDest <= 0) {
+                break;
+            }
+            for(int[] neighbor: (Set<int[]>)GRAPH[city]) {
+                int[] nextCity = {priceFromSource + neighbor[1], neighbor[0], remainingHopsToDest-1};
+                pq.offer(nextCity);
+            }
+        }
+        return -1;
     }
 }
