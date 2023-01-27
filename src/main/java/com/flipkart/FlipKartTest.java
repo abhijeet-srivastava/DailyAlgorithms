@@ -272,4 +272,28 @@ public class FlipKartTest {
         }
         return dist[dst] == Integer.MAX_VALUE ? -1 : dist[dst];
     }
+
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> dict = wordDict.stream().collect(Collectors.toSet());
+        boolean[] visited = new boolean[s.length()];
+        Deque<Integer> queue = new ArrayDeque<>();
+        queue.offer(0);
+        while (!queue.isEmpty()) {
+            int start = queue.poll();
+            if(visited[start]){
+                continue;
+            }
+            for(int end = start+1; end <= s.length(); end++) {
+                String current = s.substring(start, end);
+                if(!dict.contains(current)) {
+                    continue;
+                }else if(end == s.length()){
+                    return true;
+                }
+                queue.offer(end);
+            }
+            visited[start] = true;
+        }
+        return false;
+    }
 }
