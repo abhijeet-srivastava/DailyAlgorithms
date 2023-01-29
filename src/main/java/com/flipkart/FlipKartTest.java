@@ -296,4 +296,46 @@ public class FlipKartTest {
         }
         return false;
     }
+    public boolean wordBreak1(String s, List<String> wordDict) {
+        Set<String> dict = wordDict.stream().collect(Collectors.toSet());
+        boolean[] DP = new boolean[s.length()];
+        DP[0] = true;
+        for(int i = 1; i <= s.length(); i++) {// On Length of substring
+            for(int j = 0; j < i; j++) {//Start of substring
+                if(DP[j] && dict.contains(s.substring(j, i))) {
+                    DP[i] = true;
+                    break;
+                }
+            }
+        }
+        return DP[s.length()];
+    }
+    private List<String> findAllConcatenatedWordsInADict(String[] words) {
+        Set<String> dict = Stream.of(words).collect(Collectors.toSet());
+        List<String> result = new ArrayList<>();
+        for(String word: words) {
+            boolean[] visited = new boolean[word.length()];
+            if(dfs(0, word, visited, dict)) {
+                result.add((word));
+            }
+        }
+        return result;
+    }
+
+    private boolean dfs(int length, String word, boolean[] visited, Set<String> dict) {
+        if(length == word.length()) {
+            return true;
+        }
+        if(visited[length]) {
+            return false;
+        }
+        visited[length] = false;
+        for(int i = word.length() - (length == 0 ? 1:0); i > length; i--) {
+            if(dict.contains(word.substring(length, i))
+                    && dfs(i, word, visited, dict)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
