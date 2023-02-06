@@ -366,4 +366,31 @@ public class FlipKartTest {
         }
         return arr;
     }
+    public List<Integer> findAnagrams1(String s, String p) {
+        List<Integer> res = new ArrayList<>();
+        int[] pArr = getCharCounts(p);
+        int[] sArr = new int[26];
+        int n = s.length(), m = p.length();
+        for(int i = 0; i < n; i++) {
+            sArr[s.charAt(i) - 'a'] += 1;
+            if(i < m-1) {
+                continue;
+            }
+            if(i >= m) {
+                sArr[s.charAt(i-m) - 'a'] -= 1;
+            }
+            //System.out.printf("Checking at: %d\n", i);
+            if(isAnagram(sArr, pArr)) {
+                res.add(i-m+1);
+            }
+        }
+        return res;
+    }
+    private int[] getCharCounts(String p) {
+        int[] arr = new int[26];
+        for(char ch : p.toCharArray()) {
+            arr[ch-'a'] += 1;
+        }
+        return arr;
+    }
 }
