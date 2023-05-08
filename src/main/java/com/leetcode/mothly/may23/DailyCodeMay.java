@@ -1,12 +1,28 @@
 package com.leetcode.mothly.may23;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DailyCodeMay {
 
     public static void main(String[] args) {
         DailyCodeMay dcm = new DailyCodeMay();
-        dcm.test6May();
+        //dcm.test6May();
+        //dcm.test7May();
+        dcm.testContest344_1();
+    }
+
+    private void testContest344_1() {
+        int[] arr = {1,2,3,4,5};
+        int[] res = distinctDifferenceArray(arr);
+        System.out.printf("[%s]\n", IntStream.of(res).mapToObj(String::valueOf).collect(Collectors.joining(", ")));
+    }
+
+    private void test7May() {
+        int[] arr = {3,1,5,6,4,2};
+        int[] res = longestObstacleCourseAtEachPosition(arr);
+        System.out.printf("[%s]\n", IntStream.of(res).mapToObj(String::valueOf).collect(Collectors.joining(", ")));
     }
 
     private void test6May() {
@@ -39,6 +55,70 @@ public class DailyCodeMay {
             }
         }
         return (int)res;
+    }
+    public int[] longestObstacleCourseAtEachPosition(int[] nums) {
+        int n = nums.length, len = 1;
+        int[] DP = new int[n];
+        int[] res = new int[n];
+        DP[0] = nums[0];
+        res[0] = 1;
+        for(int i = 1; i < nums.length; i++) {
+            if(DP[len-1] <= nums[i]) {
+                DP[len] = nums[i];
+                len += 1;
+                res[i] = len;
+            }else if(nums[i] <= DP[0]) {
+                DP[0] = nums[i];
+                res[i] = 1;
+            }  else {
+                int ip = Arrays.binarySearch(DP, 0, len-1, nums[i]);
+                if(ip < 0) {
+                    ip = -(ip+1);
+                    res[i] = ip+1;
+                } else {
+                    res[i] = ip+2;
+                }
+                DP[ip] = nums[i];
+            }
+        }
+        return res;
+    }
+
+    public int[] distinctDifferenceArray(int[] nums) {
+        int n = nums.length;
+        int[] counter = new int[51];
+        int[] suffix = new int[n], prefix =  new int[n];
+        prefix[0] = 1;
+        suffix[n-1] = 1;
+        counter[nums[0]] = 1;
+        for(int i = 1; i < n; i++) {
+            prefix[i] = prefix[i-1] + (counter[nums[i]] > 0 ? 0 : 1);
+            counter[nums[i]] += 1;
+        }
+        Arrays.fill(counter, 0);
+        counter[nums[n-1]] = 1;
+        for(int i = n-2; i >= 0; i--) {
+            suffix[i] = suffix[i+1] + (counter[nums[i]] > 0 ? 0 : 1);
+            counter[nums[i]] += 1;
+        }
+        int[] res = new int[n];
+        for(int i = 0; i < n-1; i++) {
+            res[i] = prefix[i] - suffix[i+1];
+        }
+        res[n-1] = prefix[n-1];
+        return res;
+
+    }
+    public int diagonalSum(int[][] mat) {
+        int n  = mat.length;
+        int sum = 0;
+        for(int i = 0; i < n; i++) {
+            sum += mat[i][i] + mat[i][n-i-1];
+        }
+        if((n&1) != 0) {
+            sum -= mat[n/2][n/2];
+        }
+        return sum;
     }
 
 }
