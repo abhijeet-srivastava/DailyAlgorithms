@@ -44,12 +44,55 @@ public class DynamicProgramming {
 
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
+        //dp.testXoR();
+        //dp.testSort();
+        dp.testPutMarbles();
         //dp.testMaxProfit();
-        dp.testLongestValidParanthesis();
+        //dp.testLongestValidParanthesis();
         //dp.testMinWindow();
         //dp.testMinLexicoGraphic();
         //dp.testMaxAreainHistogram();
         //dp.testPrimeNumbers();
+    }
+
+    private void testPutMarbles() {
+        int[] weights = {1,4,2,5,2};
+        long diff = putMarbles(weights, 3);
+        System.out.printf("diff: %d\n", diff);
+    }
+
+    private long putMarbles(int[] weights, int k) {
+        int n = weights.length;
+        if(k == 1 || k == n) {
+            return 0l;
+        }
+        long[] comb = new long[n-1];
+        for(int i = 0; i < n-1; i++) {
+            comb[i] = weights[i] + weights[i+1];
+        }
+        Arrays.sort(comb);
+        //Arrays.sort(comb, 0, n - 1);
+        long res = 0l;
+        for(int i = 0; i < k-1; i++){
+            res += (comb[n-2-i] - comb[i]);
+        }
+        //--5, 6, 7, 7
+        return res;
+    }
+
+    private void testSort() {
+        int[] arr = {5, 6, 7, 7};
+        int[] arr1 = {5, 6, 7, 7};
+        Arrays.sort(arr);
+        System.out.printf("arr - [%s]\n", IntStream.of(arr).mapToObj(String::valueOf).collect(Collectors.joining(",")));
+        Arrays.sort(arr1, 0, arr1.length-1);
+        System.out.printf("arr - [%s]\n", IntStream.of(arr).mapToObj(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    private void testXoR() {
+        System.out.printf("Expected = 0: actual: %d\n", 'T' ^ 'T');
+        System.out.printf("Expected = 1: actual:%d\n", 'F' ^ 'T');
+        System.out.printf(":%d\n", 0%0);
     }
 
     private void testPrimeNumbers() {
