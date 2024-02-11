@@ -7,7 +7,7 @@ public class PatternMatchingZArray {
     }
 
     private void match() {
-        int[] nums = {1,4,4,1,3,5,5,3}, pattern = {-1, 0, 1};
+        int[] nums = {1,4,4,1,3,5,5,3}, pattern = {1, 0, -1};
         int count = countMatchingSubarrays(nums, pattern);
         System.out.printf("Count: %d\n", count);
     }
@@ -31,6 +31,24 @@ public class PatternMatchingZArray {
         }
 
         return count;
+    }
+    private int[] z_function(int[] arr) {
+        int n = arr.length;
+        int[] z = new int[n];
+        int l = 0, r = 0;
+        for(int i = 1; i < n; i++) {
+            if(i < r) {
+                z[i] = Math.min(r - i, z[i - l]);
+            }
+            while(i + z[i] < n && arr[z[i]] == arr[i + z[i]]) {
+                z[i]++;
+            }
+            if(i + z[i] > r) {
+                l = i;
+                r = i + z[i];
+            }
+        }
+        return z;
     }
     private int[] calculateZArr(int[] target) {
         int m = target.length;
