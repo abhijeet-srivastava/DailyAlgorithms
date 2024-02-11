@@ -96,6 +96,11 @@
           <artifactId>jsoniter</artifactId>
           <version>0.9.23</version>
       </dependency>
+      <dependency>
+          <groupId>com.opencsv</groupId>
+          <artifactId>opencsv</artifactId>
+          <version>5.7.1</version>
+      </dependency>
       <!--<dependency>
           <groupId>com.oracle.casb.dp.seclore</groupId>
           <artifactId>UserRightService</artifactId>
