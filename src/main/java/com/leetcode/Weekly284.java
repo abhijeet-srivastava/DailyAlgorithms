@@ -1,6 +1,7 @@
 package com.leetcode;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,7 +14,122 @@ public class Weekly284 {
         //w284.testLongestRepeating();
         //w284.testMergeIntervaals();
         //w284.testUniquCharStr();
-        w284.wordSuggestions();
+        //w284.wordSuggestions();
+        //w284.testPrimeFactors();
+        //w284.testCombinations(2, 3);
+        w284.testSecret();
+    }
+
+    private void testSecret() {
+        int n = 6, firstPerson = 1;
+        int[][] meetings = {{3,4,2},{1,2,1},{2,3,1}};//{{3,1,3},{1,2,2},{0,3,3}};//{{1,2,5},{2,3,8},{1,5,10}};
+        List<Integer> res = findAllPeople(5, meetings, 1);
+        System.out.printf("[%s]\n", res.stream().map(String::valueOf).collect(Collectors.joining(", ")));
+    }
+
+    public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
+        int[] earliestTime = new int[n];
+        Arrays.fill(earliestTime, Integer.MAX_VALUE);
+        earliestTime[0] = 0;
+        earliestTime[firstPerson] = 0;
+        Set[] GRAPH = new Set[n];
+        for(int i = 0; i < n; i++) {
+            GRAPH[i] = new HashSet<int[]>();
+        }
+        for(int[] meeting: meetings) {
+            GRAPH[meeting[0]].add(new int[]{meeting[1], meeting[2]});
+            GRAPH[meeting[1]].add(new int[]{meeting[0], meeting[2]});
+        }
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{0, 0});
+        queue.offer(new int[]{firstPerson, 0});
+        while(!queue.isEmpty()) {
+            int[] person = queue.poll();
+            Set<int[]> nextPersons = GRAPH[person[0]];
+            for(int[] np: nextPersons) {
+                if(person[1] > np[1] || earliestTime[person[0]] > np[1] || earliestTime[np[0]] < np[1]) {
+                    continue;
+                }
+                earliestTime[np[0]] = Math.min(earliestTime[np[0]], np[1]);
+                queue.offer(new int[]{np[0], earliestTime[np[0]]});
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < n; i++) {
+            if(earliestTime[i] != Integer.MAX_VALUE) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    BitSet sieve = getPrimes(1_000_000);
+    private int testCombinations(int n, int m) {
+
+        Map<Integer, Integer> factorial_n = factorial(n);
+        Map<Integer, Integer> factorialM_n = factorial(m+n-1);
+
+        factorial_n.forEach((k, v) ->
+                factorialM_n.merge(k, v, (v1, v2) -> v1 - 2*v2)
+        );
+        int res = 1;
+        for(var t: factorialM_n.entrySet()) {
+            int count = t.getValue();
+            while(count-- > 1) {
+                res *= t.getKey();
+            }
+        }
+        return res;
+    }
+
+    private Map<Integer, Integer> factorial(int n) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 2; i <= n; i++) {
+            if(sieve.get(i)) {
+                map.put(i, 1);
+            } else {
+                Map<Integer, Integer> primeFactors = getPrimeFactors(i);
+                primeFactors.forEach((key, value) ->
+                        map.merge(key, value, (v1, v2) -> v1+v2)
+                );
+            }
+        }
+        return map;
+    }
+
+    private Map<Integer, Integer> getPrimeFactors(int num) {
+        Map<Integer, Integer> primeFactors =  new HashMap<>();
+        for(int i = 2; i <= num; i++) {
+            if(sieve.get(i) && num%i == 0)  {
+                int count = 0;
+                while(num%i == 0) {
+                    num /= i;
+                    count += 1;
+                }
+                primeFactors.put(i, count);
+            }
+        }
+        return primeFactors;
+    }
+
+    private void testPrimeFactors() {
+        BitSet sieve = getPrimes(1_000_000);
+        int num = 2980;
+        Map<Integer, Integer> primeFactors =  new HashMap<>();
+        for(int i = 2; i <= num; i++) {
+            if(sieve.get(i) && num%i == 0)  {
+                int count = 0;
+                while(num%i == 0) {
+                    num /= i;
+                    count += 1;
+                }
+                primeFactors.put(i, count);
+            }
+        }
+        int i = 0;
+        for(var t: primeFactors.entrySet()) {
+            System.out.printf("%d: Factor:%d, count: %d is True: %b\n", i++, t.getKey(), t.getValue(), sieve.get(t.getKey()));
+        }
     }
 
     private void wordSuggestions() {
@@ -26,6 +142,19 @@ public class Weekly284 {
         }
     }
 
+    private BitSet getPrimes(int limit) {
+        BitSet sieve = new BitSet(limit+    1);
+        sieve.set( 2, limit);
+        for(int i = 2; i*i <= limit; i++) {
+            if(!sieve.get(i)) {
+                continue;
+            }
+            for(int p = i << 1; p < limit; p += i) {
+                sieve.clear(p);
+            }
+        }
+        return sieve;
+    }
     private void testUniquCharStr() {
         //String s = "ABCDQEFGHIQJKLMNOPQ";
         String s = "ABACADA";
