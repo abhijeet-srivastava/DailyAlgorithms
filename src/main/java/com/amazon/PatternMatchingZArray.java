@@ -55,7 +55,7 @@ public class PatternMatchingZArray {
         int[] z = new int[n];
         int l = 0;
         for(int i = 1; i < n; i++) {
-            z[i] = Math.min(z[l] + l -i, z[i-l]);
+            z[i] = Math.min(z[l] + l - i, z[i-l]);
             z[i] = Math.max(0, z[i]);
             while(i + z[i] < n && arr[z[i]] == arr[i+z[i]]) {
                 z[i]++;

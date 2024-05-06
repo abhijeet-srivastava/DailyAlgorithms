@@ -1,6 +1,8 @@
 package com.leetcode.contest392;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 
 public class App {
 
@@ -9,7 +11,58 @@ public class App {
         //app.testFirst();
        // app.testSmallestString();
         //app.testMedian();
-        app.testCheckValidString();
+        //app.testCheckValidString();
+        //app.testSadwitchDistr();
+        app.testLruCache();
+    }
+
+    private void testLruCache() {
+        LRUCache cache = new LRUCache(2);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        int val = cache.get(1);
+        System.out.printf("key: %d, val: %d\n", 1, val);
+        cache.put(3,3);
+        val = cache.get(2);
+        System.out.printf("key: %d, val: %d\n", 2, val);
+        cache.put(4,4);
+        val = cache.get(1);
+        System.out.printf("key: %d, val: %d\n", 1, val);
+        val = cache.get(3);
+        System.out.printf("key: %d, val: %d\n", 3, val);
+        val = cache.get(4);
+        System.out.printf("key: %d, val: %d\n", 2, val);
+
+
+    }
+
+    private void testSadwitchDistr() {
+        int[] students = {1,1,1,0,0,1}, sandwitches = {1,0,0,0,1,1};
+        int count = countStudents(students, sandwitches);
+        System.out.printf("count: %d\n", count);
+    }
+
+    public int countStudents(int[] students, int[] sandwiches) {
+        Deque<Integer> queue = new ArrayDeque<>();
+        for(int student: students) {
+            queue.offerLast(student);
+        }
+        int j = 0;
+        while(true) {
+            int size = queue.size();
+            for(int i = size; i > 0 && j < sandwiches.length;i--) {
+                int currChoice = queue.pollFirst();
+                if(currChoice == sandwiches[j]) {
+                    j += 1;
+                } else {
+                    queue.offerLast(currChoice);
+                }
+            }
+            if(size == queue.size()) {
+                break;
+            }
+        }
+        return queue.size();
     }
 
     private void testCheckValidString() {

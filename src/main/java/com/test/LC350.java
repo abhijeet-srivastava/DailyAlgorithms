@@ -1,4 +1,4 @@
-package main.java;
+package com.test;
 
 import java.util.*;
 import java.util.function.Function;

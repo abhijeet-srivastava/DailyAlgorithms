@@ -1,4 +1,4 @@
-package com;
+package com.test;
 
 import com.oracle.casb.common.ListNode;
 

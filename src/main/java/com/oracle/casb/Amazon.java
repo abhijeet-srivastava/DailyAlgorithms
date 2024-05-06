@@ -150,6 +150,22 @@ public class Amazon {
 
     }
 
+    //https://leetcode.com/problems/egg-drop-with-2-eggs-and-n-floors
+    private int eggDrop(int n) {
+        if(n <= 1) {
+            return n;
+        }
+        int[] DP = new int[n+1];
+        DP[1] = 1;
+        for(int floor = 2; floor <= n; floor++) {
+            DP[floor] = Integer.MAX_VALUE;
+            for(int i = 1; i <= floor; i++) {
+                int fromIthFloor = 1 + Math.max(i-1, DP[floor-i]);
+                DP[floor] = Math.min(DP[floor], fromIthFloor);
+            }
+        }
+        return DP[n];
+    }
     public int getDrops(int eggs, int floors){
         //base case 1:
         //if floors = 0 then no drops are required OR floors = 1 then 1 drop is required
@@ -170,6 +186,27 @@ public class Amazon {
             minimumDrops = Math.min(tempResult,minimumDrops);
         }
         return minimumDrops + 1;
+    }
+    //Memoisation
+    public int getDropsMemo(int eggs, int floors) {
+        Integer[][] memo = new Integer[eggs+1][floors+1];
+        return getDropsMemoRecur(eggs, floors, memo);
+    }
+
+    private int getDropsMemoRecur(int eggs, int floors, Integer[][] memo) {
+        if(eggs == 1 || floors <= 1) {
+            return  floors;
+        } else if(memo[eggs][floors] != null) {
+            return memo[eggs][floors];
+        }
+        int minVal = Integer.MAX_VALUE;
+        for(int i = 1; i <= floors; i++) {
+            int doprFromIthFloor
+                    = Math.max(getDropsMemoRecur(eggs-1, i-1, memo), getDropsMemoRecur(eggs, floors-i, memo));
+            minVal = Math.min(minVal,doprFromIthFloor);
+        }
+        memo[eggs][floors] = minVal;
+        return minVal;
     }
 
     private void insertInTree(TreeNode<Integer> root, int i, TreeNode<Integer>[] successor) {

@@ -284,6 +284,21 @@ public class LeetCodeFeb {
         }
         return primes;
     }
+    private boolean[]  generatePrimes(int n) {
+        boolean[] primes = new boolean[n];
+        Arrays.fill(primes, true);
+        primes[0] = false;
+        primes[1] = false;
+        for(int i = 2; i*i < n; i++) {
+            if(!primes[i]) {
+                continue;
+            }
+            for(int p = i*i; p < n; p += i){
+                primes[p] = false;
+            }
+        }
+        return primes;
+    }
     class DSU {
         int[] parent;
         int[] rank;
