@@ -13,7 +13,53 @@ public class LeetCodeFeb {
         //lcf.testCanTraverseAllPairs();
         //lcf.testLargestSquareSize();
         //lcf.testDecode();
-        lcf.testCombCount();
+        //lcf.testCombCount();
+        lcf.testMaxGold();
+    }
+
+    private void testMaxGold() {
+        int[][] grid = {
+                { 0, 0, 0, 0, 0, 0,32, 0, 0,20},
+                { 0, 0, 2, 0, 0, 0, 0,40, 0,32},
+                {13,20,36, 0, 0, 0,20, 0, 0, 0},
+                { 0,31,27, 0,19, 0, 0,25,18, 0},
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                { 0, 0, 0, 0, 0, 0, 0,18, 0, 6},
+                { 0, 0, 0,25, 0, 0, 0, 0, 0, 0},
+                { 0, 0, 0,21, 0,30, 0, 0, 0, 0},
+                {19,10, 0, 0,34, 0, 2, 0, 0,27},
+                { 0, 0, 0, 0, 0,34, 0, 0, 0, 0}
+        };
+        int max = getMaximumGold(grid);
+        System.out.printf("Max: %d\n", max);
+    }
+
+    public int getMaximumGold(int[][] grid) {
+        int max = 0;
+        for(int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[0].length; j++) {
+                if(grid[i][j] == 0) {
+                    continue;
+                }
+                int[][] visited = new int[grid.length][grid[0].length];
+                max = Math.max(max, dfs(i, j, grid, visited));
+            }
+        }
+        return max;
+    }
+    int[][] DIRS = {{0,-1}, {0, 1}, {-1, 0}, {1, 0}};
+    private int dfs(int r, int c, int[][] grid,  int[][] visited) {
+        int m = grid.length, n = grid[0].length;
+        if(r < 0 || r >= m || c < 0 || c >= n || visited[r][c] != 0 || grid[r][c] == 0) {
+            return 0;
+        }
+        visited[r][c] = 1;
+        int maxGold = 0;
+        for(int[] dir: DIRS) {
+            maxGold = Math.max(maxGold, dfs(r+dir[0], c + dir[1], grid, visited));
+        }
+        visited[r][c] = 0;
+        return  grid[r][c] + maxGold;
     }
 
     private void testCombCount() {

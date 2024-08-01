@@ -20,6 +20,22 @@ public class Weekly284 {
         w284.testSecret();
     }
 
+
+
+    public void wiggleSort(int[] nums) {
+        int len = nums.length;
+        int[] arr = nums.clone();
+        Arrays.sort(arr);
+        if(len <= 2) {
+            return;
+        }
+        int l = 0, r = len-1, idx = 0;
+        while(l < r) {
+            nums[idx++] = arr[l++];
+            nums[idx++] = arr[r--];
+        }
+    }
+
     private void testSecret() {
         int n = 6, firstPerson = 1;
         int[][] meetings = {{3,4,2},{1,2,1},{2,3,1}};//{{3,1,3},{1,2,2},{0,3,3}};//{{1,2,5},{2,3,8},{1,5,10}};
