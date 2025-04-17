@@ -1,14 +1,19 @@
 package com.assignemnts;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class App {
@@ -16,7 +21,151 @@ public class App {
     public static void main(String[] args) {
         App app = new App();
         //app.testAssignment();
-        app.testCommonOcean();
+        //app.testCommonOcean();
+        app.testCandidateRanking();
+    }
+
+    private void testCandidateRanking() {
+        List<Ballot> ballots = getBallots_3();
+        // A - 9, C - 8, B - 4, D - 3
+        List<String> res = getResult(ballots);
+        for(String candidate: res) {
+            System.out.printf("Candidate - %s\n", candidate);
+        }
+    }
+
+    private List<Ballot> getBallots_1() {
+        List<Ballot> ballots = new ArrayList<>();
+        ballots.add(new Ballot("A", "B"));
+        ballots.add(new Ballot("C", "B", "A"));
+        // A - 4, B - 4, C - 3
+        return ballots;
+    }
+
+    private List<Ballot> getBallots_2() {
+        List<Ballot> ballots = new ArrayList<>();
+        ballots.add(new Ballot("A", "B"));
+        ballots.add(new Ballot("C", "B", "A"));
+        ballots.add(new Ballot("D", "A", "B"));
+        ballots.add(new Ballot("P", "M", "B"));
+        // A - 6, B - 6, C - 3
+        return ballots;
+    }
+
+    private List<Ballot> getBallots_3() {
+        List<Ballot> ballots = new ArrayList<>();
+        ballots.add(new Ballot("A", "B"));
+        ballots.add(new Ballot("C", "B", "A"));
+        //B - 4, A - 4, C - 3
+        return ballots;
+    }
+
+    @NotNull
+    private List<Ballot> getBallots() {
+        List<Ballot> ballots = new ArrayList<>();
+        ballots.add(new Ballot("A", "B", "C"));
+        ballots.add(new Ballot("A", "C", "B"));
+        ballots.add(new Ballot("A", "C", "D"));
+        ballots.add(new Ballot("C", "D", "B"));
+        return ballots;
+    }
+
+    private List<String> getResult(List<Ballot> ballots) {
+        Map<String, CandidateVote> candidateVotes = new HashMap<>();
+        // TreeMap<Integer, String> pointToCandidate = new TreeMap<>();
+        int si = 0;
+        for(int bi = 0; bi < ballots.size(); bi++) {
+            Ballot ballot = ballots.get(bi);
+            if(ballot.vote.size() > 3) {
+                continue;
+            }
+            for(int idx = 0; idx < ballot.vote.size(); idx++) {
+                //CandidateVote candidate = candidateVotes.get(ballot.vote.get(idx));
+                if(!candidateVotes.containsKey(ballot.vote.get(idx))) {
+                    candidateVotes.put(ballot.vote.get(idx), new CandidateVote(ballot.vote.get(idx)));
+                }
+                candidateVotes.get(ballot.vote.get(idx)).incrementRank(idx);
+                candidateVotes.get(ballot.vote.get(idx)).incrementPoint(idx, si);
+                /*if(!pointToCandidate.containsKey(candidateVotes.get(ballot.vote.get(idx)).points)) {
+                    pointToCandidate.put(candidateVotes.get(ballot.vote.get(idx)).points, )
+                }*/
+                si += 1;
+            }
+        }
+        List<CandidateVote> sortedCandidates = new ArrayList<>();
+        for(Map.Entry<String, CandidateVote> entry: candidateVotes.entrySet()) {
+            sortedCandidates.add(entry.getValue());
+        }
+        Collections.sort(sortedCandidates, Comparator.reverseOrder());
+        return sortedCandidates.stream().map(c -> c.name).toList();
+    }
+
+    private class CandidateVote implements Comparable<CandidateVote> {
+        public String name;
+        public int[] rankCount;
+
+        public int points;
+
+        public int timestamp;
+
+        public CandidateVote(String name) {
+            this.name = name;
+            this.rankCount = new int[3];
+        }
+
+        public void incrementRank(int rankIdx) {
+            this.rankCount[rankIdx] += 1;
+        }
+
+        public void incrementPoint(int rankIdx, int ts) {
+            // 0 - 3, 1 - 2, 2 - 1
+            if(rankIdx == 0) {
+                this.points += 3;
+            } else if(rankIdx == 1) {
+                this.points += 2;
+            } else {
+                this.points += 1;
+            }
+            this.timestamp = ts;
+        }
+
+
+        @Override
+        public int compareTo(@NotNull App.CandidateVote other) {
+            if (other.points != this.points) {
+                return Integer.compare(this.points, other.points);
+            }
+            return Integer.compare(other.timestamp, this.timestamp);
+            /*for(int i = 0; i < this.rankCount.length; i++) {
+                if(this.rankCount[i] < other.rankCount[i]) {
+                    return -1;
+                } else if(this.rankCount[i] > other.rankCount[i]) {
+                    return 1;
+                }
+            }
+            return this.name.compareTo(other.name);*/
+        }
+    }
+
+
+    public class Ballot {
+        public List<String> vote;
+        public Ballot(String cand1, String cand2, String cand3) {
+            this.vote = new ArrayList<>(3);
+            this.vote.add(cand1);
+            this.vote.add(cand2);
+            this.vote.add(cand3);
+        }
+        public Ballot(String cand1, String cand2) {
+            this.vote = new ArrayList<>(2);
+            this.vote.add(cand1);
+            this.vote.add(cand2);
+        }
+        public Ballot(String cand1) {
+            this.vote = new ArrayList<>(1);
+            this.vote.add(cand1);
+        }
+
     }
 
     private void testCommonOcean() {

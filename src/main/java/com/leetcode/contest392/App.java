@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -21,7 +23,8 @@ public class App {
         //app.testSadwitchDistr();
        // app.testLruCache();
         //app.testMaxScore();
-        app.testOrderMatch();
+        //app.testOrderMatch();
+        app.testQuickSort();
     }
 
     private void testOrderMatch() {
@@ -419,5 +422,41 @@ public class App {
             }
         }
         return l;
+    }
+
+    private void testQuickSort() {
+        int[] arr = {23, 0, 2, 5, 1, 9, 65,43, 26, 9, 76, 45, -13};
+        sortArray(arr);
+        String str = Arrays.stream(arr).boxed().map(String::valueOf).collect(Collectors.joining(", "));
+        System.out.printf("Sorted: [%s]\n", str);
+
+    }
+    private void sortArray(int[] arr) {
+        quickSort(0, arr.length-1, arr);
+    }
+    Random rand = new Random();
+    private void quickSort(int l, int r, int[] arr) {
+        if(l >= r) {
+            return;
+        }
+        int pi = l + rand.nextInt(r-l);
+        int pivot = arr[pi];
+        swap(pi, r, arr);
+        int si = l;
+        for(int idx = l; idx <= r; idx++) {
+            if(arr[idx] < pivot) {
+                swap(si, idx, arr);
+                si += 1;
+            }
+        }
+        swap(si, r, arr);
+        quickSort(l, si-1, arr);
+        quickSort(si+1, r, arr);
+;    }
+
+    private void swap(int i, int j, int[] arr) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
 }

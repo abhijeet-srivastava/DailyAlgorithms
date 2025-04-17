@@ -34,7 +34,35 @@ public class TestProg {
         //tp.testSpiralMetrix();
         //tp.testSpecialCharacter();
         //tp.testShortestPath();
-        tp.testStringConcatenation();
+        //tp.testStringConcatenation();
+        tp.testLongestPalindrome();
+    }
+
+    private void testLongestPalindrome() {
+        String str = "cabbad";
+        String res = longestPalindrome(str);
+        System.out.printf("Res: %s\n", res);
+    }
+
+    public  String longestPalindrome(String s) {
+        int len = s.length();
+        boolean[][] DP = new boolean[len][len];
+        int maxLen = 0;
+        String maxString = "";
+        //i , j => s[i] == s[j] && DP[i+1][j-1] = true;; [0][0] => i = -1, j = 1
+        for(int j = 0; j < len; j++) {
+            for(int i = j; i >= 0; i--) {
+                if(s.charAt(i) == s.charAt(j) && ((j-i) <= 1 || DP[i+1][j-1])) {
+                    int currLen = j-i+1;
+                    if(currLen > maxLen) {
+                        maxLen = currLen;
+                        maxString = s.substring(i, j+1);
+                    }
+                    DP[i][j] = true;
+                }
+            }
+        }
+        return maxString;
     }
 
     private void testStringConcatenation() {

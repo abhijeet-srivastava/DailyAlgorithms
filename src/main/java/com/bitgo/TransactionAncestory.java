@@ -60,7 +60,7 @@ public class TransactionAncestory {
      * E->1
      * D->0
      * F->0
-     * @param transactions
+     * @param transactionHierarchy
      * @return
      */
     private List<TransactionAncestors> findAncestors(Map<String, List<String>> transactionHierarchy) {
