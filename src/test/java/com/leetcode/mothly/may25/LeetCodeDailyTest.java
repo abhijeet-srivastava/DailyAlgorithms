@@ -1,4 +1,4 @@
-package com.leetcode.mothly.my25;
+package com.leetcode.mothly.may25;
 
 import org.junit.jupiter.api.Test;
 
