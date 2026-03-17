@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.errors.ValidationException;
-import sun.misc.Unsafe;
+//import sun.misc.Unsafe;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -581,7 +581,7 @@ public class App
         }
     }
 
-    private  void testUnsafe() {
+    /*private  void testUnsafe() {
         Field f = null;
         try {
             f = Unsafe.class.getDeclaredField("theUnsafe");
@@ -593,7 +593,7 @@ public class App
         } catch (NoSuchFieldException |IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private boolean checkValidZip(String fileName) {
         Path zipfile = Paths.get(fileName);
